@@ -127,7 +127,6 @@
 127.0.0.1 web.data.pplive.com
 127.0.0.1 apm.suning.cn
 127.0.0.1 dfp.suning.com
-127.0.0.1 ssac.suning.com
 #http://yn.voole.com/app
 127.0.0.1 adinf.voole.com
 127.0.0.1 apkinfo.voole.com
@@ -139,5 +138,87 @@
 127.0.0.1 dc.cp21.ott.cibntv.net
 127.0.0.1 s.de123.net
 127.0.0.1 dc.vmoters.com
+#http://www.1ting.com/
+127.0.0.1 bddm.999d.com
+127.0.0.1 bdjs.999d.com
+#http://www.duomi.com/
+127.0.0.1 service.ad.duomi.com
+#http://www.kugou.com/
+127.0.0.1 channel.fanxing.kugou.com
+127.0.0.1 fanxing.kugou.com
+127.0.0.1 gamebox.kugou.com
+127.0.0.1 install.kugou.com
+127.0.0.1 log.stat.kugou.com
+127.0.0.1 mvads.kugou.com
+127.0.0.1 sdn.kugou.com
+127.0.0.1 tj.kugou.com
+127.0.0.1 youxi.kugou.com
+#http://mo.kugou.com/
+127.0.0.1 ads.service.kugou.com
+127.0.0.1 d.kugou.com
+127.0.0.1 kgmobilestat.kugou.com
+127.0.0.1 log.web.kugou.com
+127.0.0.1 mobilelog.kugou.com
+127.0.0.1 push.mobile.kugou.com
+127.0.0.1 song.fanxing.kugou.com
+#http://m.kuwo.cn/
+127.0.0.1 g.koowo.com
+127.0.0.1 c.kuwo.cn
+127.0.0.1 log.kuwo.cn
+127.0.0.1 mobilead.kuwo.cn
+127.0.0.1 rich.kuwo.cn
+127.0.0.1 wa.kuwo.cn
+127.0.0.1 webstat.kuwo.cn
+127.0.0.1 api.iimedia.cn
+127.0.0.1 g.haluoha.com
+#http://music.baidu.com/
+127.0.0.1 log.music.baidu.com
+127.0.0.1 qianclick.baidu.com
+127.0.0.1 click.qianqian.com
+#http://m.qingting.fm/
+127.0.0.1 ad.qingting.fm
+127.0.0.1 s.qtad.qingting.fm
+#http://m.ximalaya.com/
+127.0.0.1 ad.ximalaya.com
+127.0.0.1 adse.ximalaya.com
+#https://www.spotify.com/
+127.0.0.1 adeventtracker.spotify.com
+127.0.0.1 analytics.spotify.com
+127.0.0.1 log.spotify.com
+#http://www.miguvideo.com/
+127.0.0.1 adxserver.ad.cmvideo.cn
+127.0.0.1 dspserver.ad.cmvideo.cn
+127.0.0.1 openstorage.ad.cmvideo.cn
+#http://music.migu.cn/
+127.0.0.1 wtrace.cmgame.com
+#http://www.yinyuetai.com/
+127.0.0.1 client.stats.yinyuetai.com
+127.0.0.1 log.collect.yinyuetai.com
+127.0.0.1 shop.admin.yinyuetai.com
+127.0.0.1 shop.yinyuetai.com
+127.0.0.1 statisticsv2.yinyuetai.com
+127.0.0.1 t.collect.yinyuetai.com
+127.0.0.1 col.hztags.net
+#mting.info
+127.0.0.1 advert.mting.info
+127.0.0.1 sf1-ttcdn-tos.pstatp.com
+127.0.0.1 sf3-ttcdn-tos.pstatp.com
+127.0.0.1 sf6-ttcdn-tos.pstatp.com
 #rrys
 127.0.0.1 pat.farvd.com
+#v.6.cn
+127.0.0.1 shrek.6.cn
+127.0.0.1 sclick.6rooms.com
+#www.huajiao.com
+127.0.0.1 ad.huajiao.com
+#m.huya.com
+127.0.0.1 mlog.hiido.com
+127.0.0.1 ylog.hiido.com
+#www.douyu.com
+127.0.0.1 v.smtcdns.net
+127.0.0.1 ad.hpplay.cn
+127.0.0.1 adeng.hpplay.cn
+127.0.0.1 conf.hpplay.cn
+127.0.0.1 fix.hpplay.cn
+127.0.0.1 sdkauth.hpplay.cn
+127.0.0.1 cdn.hpplay.com.cn

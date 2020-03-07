@@ -1,5 +1,5 @@
 @ECHO OFF
-rem 10:42 2019/6/22
+rem 17:25 2020/2/24
 cd /d "%~dp0"
 Rd "%WinDir%\system32\test_permissions" >NUL 2>NUL
 Md "%WinDir%\System32\test_permissions" 2>NUL||(Echo 请使用右键管理员身份运行！&&Pause >nul&&Exit)
@@ -15,8 +15,6 @@ call :Chrome
 call :Clipboard
 call :ControlPanelRegedit
 call :Desktop
-call :DesktopIE
-rem call :DesktopIEBank
 call :Explorer
 call :ExplorerUpdate
 call :FileTypes
@@ -24,11 +22,12 @@ call :FixCHM
 call :InputMethodCHS
 call :InternetExplorer
 call :LRCfile
+call :MacTime
 call :MicrosoftEdge
 rem call :NetReset
 call :NetShare
 call :Notepad
-call :Notepad2
+rem call :Notepad2
 call :PhotoViewer
 call :Powercfg
 call :RightMenuAdd
@@ -52,6 +51,7 @@ call :WindowsUpdateClr
 call :Wsreset
 call :StartUp
 call :NetFX35
+
 exit
 
 :Bcdedit
@@ -60,7 +60,6 @@ chkntfs /t:1
 echo 启动和故障恢复：开机：设置开机显示操作系统列表时间2秒
 bcdedit /timeout 2
 echo 禁止部分程序后台更新和自启动
-reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "SunJavaUpdateSched" /f >nul 2>nul
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >nul 2>nul
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Vivaldi Update Notifier" /f >nul 2>nul
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "IgfxTray" /f >nul 2>nul
@@ -69,6 +68,12 @@ reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "RtHDVCpl" /f
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "StartCCC" /f >nul 2>nul
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "SunJavaUpdateSched" /f >nul 2>nul
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "WindowsWelcomeCenter" /f >nul 2>nul
+goto :eof
+
+
+:cmgos
+echo 去桌面右下角水印
+reg add "HKCU\Control Panel\Desktop" /v "PaintDesktopVersion" /t REG_DWORD /d 0 /f
 goto :eof
 
 :Chrome
@@ -102,70 +107,6 @@ echo 删除桌面Microsoft Edge快捷方式
 set "reg=HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders"
 for /f "tokens=2*" %%a in ('reg query "%reg%" /v desktop') do set "desktop=%%b"
 del /f /q "%desktop%\Microsoft Edge.lnk" >nul 2>nul
-goto :eof
-
-:DesktopIE
-echo 在桌面创建多功能Internet Explorer快捷方式
-reg delete "HKCR\CLSID\{00000000-0000-0000-0000-000000000000}" /f > NUL 2>&1
-goto :eof
-
-:DesktopIEBank
-echo 在桌面创建多功能网上银行IE快捷方式
-reg delete "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}" /f > NUL 2>&1
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{00000000-0000-0000-0000-000000000001}" /ve /d "网上银行" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}" /v "InfoTip" /d "网上银行，右键直达" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}" /v "LocalizedString" /d "网上银行" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\DefaultIcon" /ve /d "C:\Windows\System32\ieframe.dll,88" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell" /ve /d "Open" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\010" /ve /d "工商银行(&I)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\010\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"https://www.icbc.com.cn/icbc/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\011" /ve /d "建设银行(&C)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\011\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.ccb.com/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\012" /ve /d "中国银行(&B)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\012\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.boc.cn/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\013" /ve /d "农业银行(&A)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\013\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.abchina.com/cn/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\020" /ve /d "交通银行(&J)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\020\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.bankcomm.com/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\021" /ve /d "招商银行(&Z)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\021\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.cmbchina.com/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\022" /ve /d "兴业银行(&D)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\022\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"https://www.cib.com.cn/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\023" /ve /d "浦发银行(&F)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\023\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.spdb.com.cn/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\024" /ve /d "邮储银行(&Y)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\024\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.psbc.com/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\025" /ve /d "民生银行(&M)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\025\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.cmbc.com.cn/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\026" /ve /d "中信银行(&X)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\026\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.citicbank.com/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\027" /ve /d "光大银行(&G)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\027\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.cebbank.com/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\028" /ve /d "平安银行(&P)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\028\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://bank.pingan.com/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\030" /ve /d "中国银联(&U)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\030\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://cn.unionpay.com/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\031" /ve /d "美国运通" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\031\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"https://www.americanexpress.com.cn/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\032" /ve /d "JCB(&J)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\032\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.jcbcard.cn/cs/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\033" /ve /d "万事达卡(&M)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\033\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"https://www.mastercard.com.cn/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\034" /ve /d "Visa(&V)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\034\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"https://www.visa.com.cn/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\035" /ve /d "人行征信查询(&X)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\035\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"https://ipcrs.pbccrc.org.cn/" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\036" /ve /d "金融许可查询(&X)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\036\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://xukezheng.cbrc.gov.cn/ilicence/licence/licenceQuery.jsp" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\037" /ve /d "支付许可查询(&X)" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\shell\037\Command" /ve /d "\"C:\Program Files\Internet Explorer\iexplore.exe\"http://www.pbc.gov.cn/zhengwugongkai/127924/128041/2951606/1923625/1923629/index.html" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\ShellFolder" /ve /d "C:\Windows\System32\ieframe.dll,-190" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\ShellFolder" /v "HideAsDeletePerUser" /d "" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\ShellFolder" /v "Attributes" /t REG_DWORD /d 0 /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\ShellFolder" /v "HideFolderVerbs" /d "" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\ShellFolder" /v "WantsParseDisplayName" /d "" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\ShellFolder" /v "HideOnDesktopPerUser" /d "" /f
-reg add "HKCR\CLSID\{00000000-0000-0000-0000-000000000001}\ShellFolder" /v "ParseDisplayNameNeedsURL" /d "" /f
 goto :eof
 
 :Explorer
@@ -220,6 +161,10 @@ reg delete "HKCR\.mpeg\ShellEx" /f >nul 2>nul
 reg delete "HKCR\.mpg\ShellEx" /f >nul 2>nul
 reg delete "HKCR\.rmvb\ShellEx" /f >nul 2>nul
 reg delete "HKCR\.wmv\ShellEx" /f >nul 2>nul
+echo 扩展到当前文件夹
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NavPaneExpandToCurrentFolder" /t REG_DWORD /d 1 /f
+echo 显示所有文件夹
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NavPaneShowAllFolders" /t REG_DWORD /d 1 /f
 goto :eof
 
 :ExplorerUpdate
@@ -230,11 +175,10 @@ reg add "HKCU\Control Panel\Desktop" /v "MenuShowDelay" /d "100" /f
 goto :eof
 
 :FileTypes
-::禁止 不断重复恢复默认设置
-rem Microsoft.3DBuilder：File Types: .stl, .3mf, .obj, .wrl, .ply, .fbx, .3ds, .dae, .dxf, .bmp, .jpg, .png, .tga
+echo 禁止 不断重复恢复默认设置
+echo Microsoft.3DBuilder：File Types: .stl, .3mf, .obj, .wrl, .ply, .fbx, .3ds, .dae, .dxf, .bmp, .jpg, .png, .tga
 reg add "HKCU\SOFTWARE\Classes\AppXvhc4p7vz4b485xfp46hhk3fq3grkdgjg" /v "NoOpenWith" /d "" /f
-
-rem Microsoft Edge：
+echo Microsoft Edge：
 rem File Types: .htm, .html
 reg add "HKCU\SOFTWARE\Classes\AppX4hxtad77fbk3jkkeerkrm0ze94wjf3s9" /v "NoOpenWith" /d "" /f
 rem File Types: .pdf
@@ -243,19 +187,16 @@ rem File Types: .svg
 reg add "HKCU\SOFTWARE\Classes\AppXde74bfzw9j31bzhcvsrxsyjnhhbq66cs" /v "NoOpenWith" /d "" /f
 rem File Types: .xml
 reg add "HKCU\SOFTWARE\Classes\AppXcc58vyzkbjbs4ky0mxrmxf8278rk9b3t" /v "NoOpenWith" /d "" /f
-
-rem Microsoft Photos：
+echo Microsoft Photos：
 rem File Types: .3g2,.3gp, .3gp2, .3gpp, .asf, .avi, .m2t, .m2ts, .m4v, .mkv .mov, .mp4, mp4v, .mts, .tif, .tiff, .wmv
 reg add "HKCU\SOFTWARE\Classes\AppXk0g4vb8gvt7b93tg50ybcy892pge6jmt" /v "NoOpenWith" /d "" /f
 rem File Types: Most Image File Types
 reg add "HKCU\SOFTWARE\Classes\AppX43hnxtbyyps62jhe9sqpdzxn1790zetc" /v "NoOpenWith" /d "" /f
 rem File Types: .raw, .rwl, .rw2 and others
 reg add "HKCU\SOFTWARE\Classes\AppX9rkaq77s0jzh1tyccadx9ghba15r6t3h" /v "NoOpenWith" /d "" /f
-
-rem Zune Music：File Types: .aac, .adt, .adts ,.amr, .flac, .m3u, .m4a, .m4r, .mp3, .mpa, .wav, .wma, .wpl, .zpl
+echo Zune Music：File Types: .aac, .adt, .adts ,.amr, .flac, .m3u, .m4a, .m4r, .mp3, .mpa, .wav, .wma, .wpl, .zpl
 reg add "HKCU\SOFTWARE\Classes\AppXqj98qxeaynz6dv4459ayz6bnqxbyaqcs" /v "NoOpenWith" /d "" /f
-
-rem Zune Video：File Types: .3g2,.3gp, .3gpp, .avi, .divx, .m2t, .m2ts, .m4v, .mkv, .mod, .mov, .mp4, mp4v, .mpe, .mpeg, .mpg, .mpv2, .mts, .tod, .ts, .tts, .wm, .wmv, .xvid
+echo Zune Video：File Types: .3g2,.3gp, .3gpp, .avi, .divx, .m2t, .m2ts, .m4v, .mkv, .mod, .mov, .mp4, mp4v, .mpe, .mpeg, .mpg, .mpv2, .mts, .tod, .ts, .tts, .wm, .wmv, .xvid
 reg add "HKCU\SOFTWARE\Classes\AppX6eg8h5sxqq90pv53845wmnbewywdqq5h" /v "NoOpenWith" /d "" /f
 goto :eof
 
@@ -390,7 +331,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments" /v
 echo 关闭IE的Smartscreen筛选器
 reg add "HKCU\Software\Microsoft\Internet Explorer\PhishingFilter" /v "EnabledV9" /t REG_DWORD /d 0 /f
 echo 更改IE默认下载目录
-reg delete "HKCU\Software\Microsoft\Internet Explorer\Main" /v "Default Download Directory" /f
+reg delete "HKCU\Software\Microsoft\Internet Explorer\Main" /v "Default Download Directory" /f > NUL 2>&1
 reg add "HKCU\Software\Microsoft\Internet Explorer\Main" /v "Default Download Directory" /d "D:\迅雷下载" /t REG_SZ /f
 echo 127.0.0.1 ieonline.microsoft.com
 SET NEWLINE=^& echo.
@@ -414,6 +355,11 @@ reg add "HKCR\lrcfile\DefaultIcon" /ve /d "imageres.dll,17" /f
 reg add "HKCR\lrcfile\shell" /f
 reg add "HKCR\lrcfile\shell\open" /f
 reg add "HKCR\lrcfile\shell\open\command" /ve /d "NOTEPAD.EXE %%1" /f
+goto :eof
+
+:MacTime
+echo 解决和Mac系统时间不同步的问题
+Reg add HKLM\SYSTEM\CurrentControlSet\Control\TimeZoneInformation /v RealTimeIsUniversal /t REG_DWORD /d 1 /f
 goto :eof
 
 :MicrosoftEdge
@@ -484,15 +430,23 @@ goto :eof
 :OneDrive
 echo 卸载OneDrive
 rem https://go.microsoft.com/fwlink/?linkid=844652
-taskkill /f /im OneDrive.exe > NUL 2>&1
-%SYSTEMROOT%\SysWOW64\OneDriveSetup.exe /uninstall
+rem 结束OneDrive进程
+taskkill /f /im OneDrive.exe
+rem 结束explorer进程，如不结束倒数第4、5、6行这3个文件夹是删不掉的
+taskkill /f /im explorer.exe
+rem 查看系统构架 卸载 32位/64位 OneDrive
+if exist %SYSTEMROOT%\SysWOW64\OneDriveSetup.exe (%SYSTEMROOT%\SysWOW64\OneDriveSetup.exe /uninstall) else (%SYSTEMROOT%\System32\OneDriveSetup.exe /uninstall)
+rem 删除本地文件
 rd /s /q "%UserProfile%\OneDrive" > NUL 2>&1
 rd /s /q "%LocalAppData%\Microsoft\OneDrive" > NUL 2>&1
 rd /s /q "%ProgramData%\Microsoft OneDrive" > NUL 2>&1
 rd /s /q "C:\OneDriveTemp" > NUL 2>&1
+rem 删除注册表项，作用是从侧边栏移除OneDrive图标
 reg delete "HKCR\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f > NUL 2>&1
 reg delete "HKCR\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f > NUL 2>&1
 reg delete "HKEY_USERS\DEFAULT\Software\Microsoft\Windows\CurrentVersion\Run" /f > NUL 2>&1
+rem 重启explorer
+start explorer
 goto :eof
 
 :PhotoViewer
@@ -854,6 +808,14 @@ echo 国内服务
 sc config QQMusicService start=disabled > NUL 2>&1
 sc config QiyiService start=disabled > NUL 2>&1
 sc config wpscloudsvr start=disabled > NUL 2>&1
+
+echo 启用网络发现与文件共享已关闭（ 自动（延迟启动） ）
+rem Function Discovery Resource Publication
+sc config FDResPub start=delayed-auto
+rem SSDP Discovery
+sc config SSDPSRV start=delayed-auto
+rem Upnp Device Host
+sc config upnphost start=delayed-auto
 goto :eof
 
 :StartUp
@@ -861,7 +823,7 @@ echo 清理启动项
 del /f /q "%ProgramData%\Microsoft\Windows\Start Menu\Programs\StartUp\*.lnk" 1>nul 2>nul
 del /f /q "%AppData%\Microsoft\Windows\Start Menu\Programs\Startup\*.lnk" 1>nul 2>nul
 echo 清空默认启动项
-reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /f > NUL 2>&1
 taskmgr
 goto :eof
 
@@ -959,85 +921,99 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer" /v "GroupPrivacyAc
 goto :eof
 
 :WindowsApps
-TITLE 卸载 Microsoft Store
-::a.     移除了下列应用/服务：（保留：Desktop App Installer、Store Purchase App、钱包、应用商店、Xbox、Windows To Go）
-::3D查看器
-PowerShell "Get-AppxPackage *Microsoft.Microsoft3DViewer* | Remove-AppxPackage"
-::地图
-PowerShell "Get-AppxPackage *Microsoft.WindowsMaps* | Remove-AppxPackage"
-::电影和电视
-PowerShell "Get-AppxPackage *Microsoft.ZuneVideo* | Remove-AppxPackage"
+TITLE 卸载 Microsoft Store Apps
+::a.移除了下列应用/服务：（保留：Store Purchase App、钱包、应用商店、Xbox、Windows To Go等） 
+::天气
+PowerShell "Get-AppxPackage *Microsoft.BingWeather* | Remove-AppxPackage"
 ::获取帮助
 PowerShell "Get-AppxPackage *Microsoft.GetHelp* | Remove-AppxPackage"
-::反馈中心
-PowerShell "Get-AppxPackage *Microsoft.WindowsFeedbackHub* | Remove-AppxPackage"
-::Groove音乐
-PowerShell "Get-AppxPackage *Microsoft.ZuneMusic* | Remove-AppxPackage"
-::画图3D
-PowerShell "Get-AppxPackage *Microsoft.MSPaint* | Remove-AppxPackage"
-::混合现实门户
-PowerShell "Get-AppxPackage *Microsoft.MixedReality.Portal* | Remove-AppxPackage"
-::录音机
-PowerShell "Get-AppxPackage *Microsoft.WindowsSoundRecorder* | Remove-AppxPackage"
-::Microsoft Solitaire Collection
-PowerShell "Get-AppxPackage *Microsoft.MicrosoftSolitaireCollection* | Remove-AppxPackage"
-::闹钟和时钟
-PowerShell "Get-AppxPackage *Microsoft.WindowsAlarms* | Remove-AppxPackage"
-::你的手机
-PowerShell "Get-AppxPackage *Microsoft.YourPhone* | Remove-AppxPackage"
+::Get Started
+PowerShell "Get-AppxPackage *Microsoft.Getstarted* | Remove-AppxPackage"
+::消息
+PowerShell "Get-AppxPackage *Microsoft.Messaging* | Remove-AppxPackage"
 ::Office Hub
 PowerShell "Get-AppxPackage *Microsoft.MicrosoftOfficeHub* | Remove-AppxPackage"
-::OneNote
+::Microsoft Solitaire Collection
+PowerShell "Get-AppxPackage *Microsoft.MicrosoftSolitaireCollection* | Remove-AppxPackage"
+::混合现实查看器
+PowerShell "Get-AppxPackage *Microsoft.MixedReality.Portal* | Remove-AppxPackage"
+::Office OneNote
 PowerShell "Get-AppxPackage *Microsoft.Office.OneNote* | Remove-AppxPackage"
 ::人脉
 PowerShell "Get-AppxPackage *Microsoft.People* | Remove-AppxPackage"
-::日历和邮件
+::Print 3D
+PowerShell "Get-AppxPackage *Microsoft.Print3D* | Remove-AppxPackage"
+::闹钟和时钟
+PowerShell "Get-AppxPackage *Microsoft.WindowsAlarms* | Remove-AppxPackage"
+::连接（移动套餐）
+PowerShell "Get-AppxPackage *Microsoft.OneConnect* | Remove-AppxPackage"
+::反馈中心
+PowerShell "Get-AppxPackage *Microsoft.WindowsFeedbackHub* | Remove-AppxPackage"
+::地图
+PowerShell "Get-AppxPackage *Microsoft.WindowsMaps* | Remove-AppxPackage"
+::Groove音乐
+PowerShell "Get-AppxPackage *Microsoft.ZuneMusic* | Remove-AppxPackage"
+::电影和电视
+PowerShell "Get-AppxPackage *Microsoft.ZuneVideo* | Remove-AppxPackage"
+goto :eof
+
+:WindowsApps1
+echo 删除 3D查看器
+PowerShell "Get-AppxPackage *Microsoft.Microsoft3DViewer* | Remove-AppxPackage"
+echo 删除 画图3D
+PowerShell "Get-AppxPackage *Microsoft.MSPaint* | Remove-AppxPackage"
+echo 删除 你的手机
+PowerShell "Get-AppxPackage *Microsoft.YourPhone* | Remove-AppxPackage"
+echo 删除 日历和邮件
 PowerShell "Get-AppxPackage *microsoft.windowscommunicationsapps* | Remove-AppxPackage"
-::SkypeApp
+echo 删除 SkypeApp
 PowerShell "Get-AppxPackage *Microsoft.SkypeApp* | Remove-AppxPackage"
-::Sticky Notes
+echo 删除 Sticky Notes
 PowerShell "Get-AppxPackage *Microsoft.MicrosoftStickyNotes* | Remove-AppxPackage"
-::使用技巧
-PowerShell "Get-AppxPackage *Microsoft.Getstarted* | Remove-AppxPackage"
-::天气
-PowerShell "Get-AppxPackage *Microsoft.BingWeather* | Remove-AppxPackage"
-::卸载Xbox游戏组件
+echo 删除 卸载Xbox游戏组件
 PowerShell "Get-AppxPackage *Microsoft.Xbox.TCUI* | Remove-AppxPackage"
 PowerShell "Get-AppxPackage *Microsoft.XboxApp* | Remove-AppxPackage"
 PowerShell "Get-AppxPackage *Microsoft.XboxIdentityProvider* | Remove-AppxPackage"
-::相机
-PowerShell "Get-AppxPackage *Microsoft.WindowsCamera* | Remove-AppxPackage"
-::消息
-PowerShell "Get-AppxPackage *Microsoft.Messaging* | Remove-AppxPackage"
-::移动套餐
-PowerShell "Get-AppxPackage *Microsoft.OneConnect* | Remove-AppxPackage"
-::卸载游戏录制工具栏
+echo 删除 卸载游戏录制工具栏
 PowerShell "Get-AppxPackage *Microsoft.XboxGameOverlay* | Remove-AppxPackage"
 PowerShell "get-appxpackage *Microsoft.XboxGamingOverlay* | remove-appxpackage"
-::照片
+echo 删除 照片
 PowerShell "Get-AppxPackage *Microsoft.Windows.Photos* | Remove-AppxPackage"
+rem ::相机
+rem PowerShell "Get-AppxPackage *Microsoft.WindowsCamera* | Remove-AppxPackage"
 goto :eof
 
 :WindowsDefender
 echo 删除安全中心开机启动
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "SecurityHealth" /f >nul 2>nul
-SecurityHealthSystray
+echo 关闭WD From 神州网信
+rem 关闭 Windows Defender 防病毒程序
+taskkill /f /im MSASCuil.exe >nul 2>nul
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d 1 /f
+rem 关闭实时防护
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d 1 /f
+rem 禁用恶意软件删除工具的Windows更新
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d 1 /f
+rem Ots
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Signature Updates" /v "FallbackOrder" /f > NUL 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Signature Updates" /v "DefinitionUpdateFileSharesSources" /f > NUL 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet" /v "SpynetReporting" /f > NUL 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet" /v "SubmitSamplesConsent" /t REG_DWORD /d 2 /f
+rem old?
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "SettingsPageVisibility" /d "Hide:windowsdefender;" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v "DontReportInfectionInformation" /t REG_DWORD /d 1 /f
+rem end
 echo 禁用Windows Defender 安全中心服务
 reg add "HKLM\SYSTEM\ControlSet001\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d 4 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d 4 /f
 echo 在未安装通过微软注册的杀软的情况下关闭Windows Security Center
 reg add "HKLM\SOFTWARE\Microsoft\Security Center\Feature" /v "DisableAvCheck" /t REG_DWORD /d 1 /f
-echo 关闭 Windows Defender 防病毒程序
-taskkill /f /im MSASCuil.exe >nul 2>nul
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /d 1 /t REG_DWORD /f
 echo 允许反恶意软件服务始终保持运行状态
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /v "ServiceKeepAlive" /t REG_DWORD /d 0 /f
 echo 关闭 Windows Defender SmartScreen
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableSmartScreen" /t REG_DWORD /d 0 /f
 echo 禁用Windows Defender SmartScreen 应用安装控制
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\SmartScreen" /v "ConfigureAppInstallControlEnabled" /t REG_DWORD /d 0 /f
-echo 关闭实时防护
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d 1 /f
 echo 禁用行为监视
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d 1 /f
 echo 禁用扫描所有下载文件和附件
@@ -1046,14 +1022,13 @@ echo 禁止监视文件和程序活动
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableOnAccessProtection" /t REG_DWORD /d 1 /f
 echo 禁止在打开实时保护时启动进程扫描
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableScanOnRealtimeEnable" /t REG_DWORD /d 1 /f
-echo 禁用恶意软件删除工具的Windows更新
-reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d 1 /f
 echo 清理：文件：使用Windows Defender扫描
 reg delete "HKCR\Drive\ShellEx\ContextMenuHandlers\EPP" /f > NUL 2>&1
 reg delete "HKCR\Directory\ShellEx\ContextMenuHandlers\EPP" /f > NUL 2>&1
 reg delete "HKCR\*\ShellEx\ContextMenuHandlers\EPP" /f > NUL 2>&1
 call :GpUpdate
 goto :eof
+
 
 :WindowsLog
 echo 禁用错误报告(Windows Error Reporting Service)
@@ -1127,6 +1102,14 @@ echo WPS2000
 reg add "HKCU\Software\Kingsoft\WPS2000\Registration" /v "User" /d "WPS User" /f
 reg add "HKCU\Software\Kingsoft\WPS2000\Registration" /v "Company" /d "WPS" /f
 reg add "HKCU\Software\Kingsoft\WPS2000\Registration" /v "Serial" /d "KSW00-00000-00000" /f
+echo 去WPS广告推荐弹窗
+reg add "HKCU\Software\Kingsoft\Office\6.0\Common\updateinfo" /v "StateSvr" /d "-" /f
+reg add "HKCU\Software\Kingsoft\Office\6.0\Common\updateinfo" /v "UpdateRecommend" /d "false" /f
+reg add "HKCU\Software\Kingsoft\Office\6.0\plugins\minisiteex" /v "instncstrt" /t REG_DWORD /d 0 /f
+reg add "HKCU\Software\Kingsoft\Office\6.0\plugins\minisiteex" /v "kbtrystatus" /d "close" /f
+echo 去除“WPS云文档”批处理
+reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{7AE6DE87-C956-4B40-9C89-3D166C9841D3}" /f >nul 2>nul
+reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{5FCD4425-CA3A-48F4-A57C-B8A75C32ACB1}" /f >nul 2>nul
 echo ZD Soft\Screen Recorder
 rem http://www.zdsoft.com/download/SRSetup.exe
 reg add "HKCU\Software\ZD Soft\Screen Recorder\7CCC341F9C9547828A0C2D346BDB4BD8" /v "Name" /d "Screen Recorder" /f
